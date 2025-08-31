@@ -1,0 +1,2488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="manifest" href="/manifest.json">
+    
+    <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js")
+      .then(() => console.log("Service Worker Registered"))
+      .catch(err => console.error("Service Worker Failed:", err));
+  }
+</script>
+
+    <style>
+        /*
+         * Main body and container styles
+         */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FF69B4, #8A2BE2);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Dynamic Background Animation: Floating Balloons --- */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .balloon {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(2px);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: float-up 20s infinite ease-in-out;
+            opacity: 0.8;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .balloon.large { width: 150px; height: 180px; animation-duration: 25s; }
+        .balloon.medium { width: 100px; height: 120px; animation-duration: 20s; }
+        .balloon.small { width: 60px; height: 72px; animation-duration: 15s; }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- Card Grid & Flip Animation --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        
+        
+        #wish{
+           display: none; 
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.5s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            position: relative;
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .card:not(.is-active):hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card.is-revealed .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            border-radius: 1.5rem;
+        }
+
+        .card-front {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-back {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: rotateY(180deg);
+        }
+
+        /* Active content styling */
+        .active-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .is-active .active-content {
+            display: flex;
+        }
+
+        .is-active .card-inner {
+            display: none;
+        }
+
+        /* Call-to-action button styling */
+        .card button {
+            background-color: #ff6b81;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 129, 0.4);
+        }
+
+        .card button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 107, 129, 0.6);
+        }
+
+        /* Specific card styles */
+        #card-1 .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        #card-1 .image-grid img {
+            border-radius: 0.75rem;
+            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            transition: transform 0.3s ease;
+        }
+        #card-1 .image-grid img:hover {
+            transform: scale(1.1);
+        }
+
+        #card-2 textarea {
+            color: black;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            width: 100%;
+            height: 100px;
+            resize: none;
+        }
+
+        #card-3 canvas {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        #card-4 canvas {
+            background-color: #000;
+            border-radius: 1rem;
+        }
+
+        #card-5 input, #card-5 textarea {
+            color: black;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+        }
+
+        #card-5 textarea {
+            height: 100px;
+            margin-top: 0.5rem;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* CSS for the cake design */
+        #cake-content {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cake-container {
+            
+            width: 250px;
+            height: 200px;
+            position: relative;
+            margin: 0 auto;
+            transform: scale(0.8); /* Scale down slightly to fit better */
+        }
+        
+        .plate {
+            width: 270px;
+            height: 110px;
+            position: absolute;
+            bottom: -10px;
+            left: -10px;
+            background-color: #ccc;
+            border-radius: 50%;
+            box-shadow: 0 2px 0 darken(#ccc, 10%), 0 4px 0 darken(#ccc, 10%), 0 5px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .cake-container > * {
+            position: absolute;
+        }
+
+        .layer {
+            position: absolute;
+            display: block;
+            width: 250px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #553c13;
+            box-shadow: 
+                0 2px 0px lighten(#553c13, 5%),
+                0 4px 0px darken(#553c13, 8.2%),
+                0 6px 0px darken(#553c13, 8.4%),
+                0 8px 0px darken(#553c13, 8.6%),
+                0 10px 0px darken(#553c13, 8.8%),
+                0 12px 0px darken(#553c13, 9%),
+                0 14px 0px darken(#553c13, 9.2%),
+                0 16px 0px darken(#553c13, 9.4%),
+                0 18px 0px darken(#553c13, 9.6%),
+                0 20px 0px darken(#553c13, 9.8%),
+                0 22px 0px darken(#553c13, 10%),
+                0 24px 0px darken(#553c13, 10.2%),
+                0 26px 0px darken(#553c13, 10.4%),
+                0 28px 0px darken(#553c13, 10.6%),
+                0 30px 0px darken(#553c13, 10.8%);
+        }
+
+        .layer-top { top: 0px; }
+        .layer-middle { top: 33px; }
+        .layer-bottom { top: 66px; }
+
+        .icing {
+            top: 2px;
+            left: 5px;
+            background-color: #f0e4d0;
+            width: 240px;
+            height: 90px;
+            border-radius: 50%;
+        }
+
+        .icing:before {
+            content: "";
+            position: absolute;
+            top: 4px;
+            right: 5px;
+            bottom: 6px;
+            left: 5px;
+            background-color: lighten(#f0e4d0, 3%);
+            box-shadow: 0 0 4px lighten(#f0e4d0, 5%), 0 0 4px lighten(#f0e4d0, 5%), 0 0 4px lighten(#f0e4d0, 5%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .drip {
+            display: block;
+            width: 50px;
+            height: 60px;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            background-color: #f0e4d0;
+        }
+
+        .drip1 {
+            top: 53px;
+            left: 5px;
+            transform: skewY(15deg);
+            height: 48px;
+            width: 40px;
+        }
+
+        .drip2 {
+            top: 69px;
+            left: 181px;
+            transform: skewY(-15deg);
+        }
+
+        .drip3 {
+            top: 54px;
+            left: 90px;
+            width: 80px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        .candle {
+            background-color: #7B020B;
+            width: 16px;
+            height: 50px;
+            border-radius: 8px / 4px;
+            top: -20px;
+            left: 50%;
+            margin-left: -8px;
+            z-index: 10;
+        }
+
+        .candle:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 16px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #9c020e;
+        }
+
+        .flame {
+            position: absolute;
+            background-color: orange;
+            width: 15px;
+            height: 35px;
+            border-radius: 10px 10px 10px 10px / 25px 25px 10px 10px;
+            top: -34px;
+            left: 50%;
+            margin-left: -7.5px;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(orange, 0.5), 0 0 20px rgba(orange, 0.5), 0 0 60px rgba(orange, 0.5), 0 0 80px rgba(orange, 0.5);
+            transform-origin: 50% 90%;
+            animation: flicker 1s ease-in-out alternate infinite;
+        }
+
+        @keyframes flicker {
+            0% { transform: skewX(5deg); box-shadow: 0 0 10px rgba(orange, 0.2), 0 0 20px rgba(orange, 0.2), 0 0 60px rgba(orange, 0.2), 0 0 80px rgba(orange, 0.2); }
+            25% { transform: skewX(-5deg); box-shadow: 0 0 10px rgba(orange, 0.5), 0 0 20px rgba(orange, 0.5), 0 0 60px rgba(orange, 0.5), 0 0 80px rgba(orange, 0.5); }
+            50% { transform: skewX(10deg); box-shadow: 0 0 10px rgba(orange, 0.3), 0 0 20px rgba(orange, 0.3), 0 0 60px rgba(orange, 0.3), 0 0 80px rgba(orange, 0.3); }
+            75% { transform: skewX(-10deg); box-shadow: 0 0 10px rgba(orange, 0.4), 0 0 20px rgba(orange, 0.4), 0 0 60px rgba(orange, 0.4), 0 0 80px rgba(orange, 0.4); }
+            100% { transform: skewX(5deg); box-shadow: 0 0 10px rgba(orange, 0.5), 0 0 20px rgba(orange, 0.5), 0 0 60px rgba(orange, 0.5), 0 0 80px rgba(orange, 0.5); }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // Event delegation to handle all clicks on cards and buttons
+    document.querySelector('.card-grid').addEventListener('click', (event) => {
+        const clickedCard = event.target.closest('.card');
+        if (!clickedCard) return;
+
+        // Handle clicks on the "Open" button
+        const openButton = event.target.closest('.open-card-btn');
+        if (openButton) {
+            event.stopPropagation(); // Prevents the card from flipping back
+            const contentId = openButton.dataset.contentId;
+            const cardContent = document.getElementById(contentId);
+            
+            // Add the 'is-active' class to show the content and hide the inner faces
+            clickedCard.classList.add('is-active');
+            clickedCard.querySelector('.card-inner').style.display = 'none';
+            cardContent.style.display = 'flex';
+
+            // Initialize specific content based on ID
+            switch(contentId) {
+                case 'drawing-canvas':
+                    setupDrawingCanvas('birthday-canvas');
+                    break;
+                case 'fireworks':
+                    setupFireworksCanvas('fireworks-canvas');
+                    break;
+                case 'poem-generator':
+                    setupPoemGenerator('card-2');
+                    break;
+                case 'message-card':
+                    setupMessageCard('card-5');
+                    break;
+                case 'cake-content':
+                    setupCakeCard();
+                    break;
+                case 'scratch-off':
+                    setupScratchCard();
+                    break;
+                    
+                case 'fortune-teller':
+    setupFortuneTeller();
+    break;
+    
+    case 'countdown-clock':
+    setupCountdownClock();
+    break;
+    
+    case 'spin-the-wheel':
+    setupSpinTheWheel();
+    break;
+    
+  
+    case 'memory-mural':
+        setupMemoryMural();
+        break;
+        
+       
+    case 'time-capsule':
+        setupTimeCapsule();
+        break;
+        
+        
+    case 'stargazer':
+        setupStargazer();
+        break;
+
+
+    case 'time-machine':
+        setupTimeMachine();
+        break;
+
+
+    case 'wishing-well':
+        setupWishingWell();
+        break;
+
+
+
+    case 'compliment-machine':
+        setupComplimentMachine();
+        break;
+
+
+
+    case 'cake-celebration':
+        setupCakeCelebration();
+        break;
+
+
+
+   
+    case 'particle-pop':
+        setupParticlePop();
+        break;
+
+
+
+
+    case 'floral-celebration':
+        setupFloralCelebration();
+        break;
+
+
+
+
+   case 'direct-message':
+        setupDirectMessage();
+        break;
+
+
+
+
+    case 'birthday-film':
+        // No setup function needed for this one
+        break;
+    case 'birthday-riddle':
+        setupBirthdayRiddle();
+        break;
+
+
+
+
+    case 'memory-match':
+        setupMemoryMatch();
+        break;
+
+
+
+   
+    case 'image-reveal':
+        setupImageReveal();
+        break;
+
+
+
+
+   
+    case 'fullscreen-video':
+        setupFullscreenVideo();
+        break;
+
+
+
+
+
+
+
+
+
+
+
+
+                // No specific setup needed for photo-album
+            }
+            return;
+        }
+
+        // If not a button, flip the card to reveal the message/content
+        if (!clickedCard.classList.contains('is-active')) {
+            clickedCard.classList.toggle('is-revealed');
+        }
+    });
+
+    /* --- POEM GENERATOR LOGIC --- */
+    const setupPoemGenerator = (cardId) => {
+        const generateBtn = document.getElementById('generate-poem-btn');
+        const poemPrompt = document.getElementById('poem-prompt');
+        const poemOutput = document.getElementById('poem-output');
+        const poemLoading = document.getElementById('poem-loading');
+
+        generateBtn.addEventListener('click', async () => {
+            const prompt = `Write a short, uplifting birthday poem about ${poemPrompt.value}. It should have a positive and happy tone.`;
+            
+            if (prompt.trim() === '') {
+                alert('Please enter a topic for the poem!');
+                return;
+            }
+
+            // Show loading spinner and hide previous output
+            poemLoading.classList.remove('hidden');
+            poemOutput.textContent = '';
+            
+            try {
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: prompt }] }],
+                };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                let response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    // Format the text nicely
+                    const formattedText = text.replace(/\n/g, '<br>');
+                    poemOutput.innerHTML = formattedText;
+                } else {
+                    poemOutput.textContent = 'Could not generate poem. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                poemOutput.textContent = 'Failed to generate poem. Please check your connection and try again.';
+            } finally {
+                poemLoading.classList.add('hidden');
+            }
+        });
+    };
+
+    /* --- DRAWING CANVAS LOGIC --- */
+    const setupDrawingCanvas = (canvasId) => {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        const clearBtn = document.getElementById('clear-canvas-btn');
+        const saveBtn = document.getElementById('save-canvas-btn');
+
+        // Make canvas responsive
+        const resizeCanvas = () => {
+            canvas.width = canvas.parentElement.offsetWidth - 32;
+            canvas.height = Math.min(canvas.width, 300);
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        // Function to draw a line
+        const draw = (x, y) => {
+            if (!isDrawing) return;
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            [lastX, lastY] = [x, y];
+        };
+
+        // Helper to get touch/mouse coordinates
+        const getCoords = (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = event.clientX || event.touches[0].clientX;
+            const clientY = event.clientY || event.touches[0].clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        };
+
+        // Mouse events
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            [lastX, lastY] = [getCoords(e).x, getCoords(e).y];
+        });
+        canvas.addEventListener('mousemove', (e) => draw(getCoords(e).x, getCoords(e).y));
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false);
+
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isDrawing = true;
+            [lastX, lastY] = [getCoords(e).x, getCoords(e).y];
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            draw(getCoords(e).x, getCoords(e).y);
+        });
+        canvas.addEventListener('touchend', () => isDrawing = false);
+
+        // Button event listeners
+        clearBtn.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        saveBtn.addEventListener('click', () => {
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = 'birthday-drawing.png';
+            link.href = dataURL;
+            link.click();
+            link.remove();
+        });
+    };
+
+    /* --- FIREWORKS LOGIC --- */
+    const setupFireworksCanvas = (canvasId) => {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        
+        const resizeCanvas = () => {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = 300;
+        };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Particle class for the fireworks
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 5,
+                    y: (Math.random() - 0.5) * 5
+                };
+                this.alpha = 1;
+                this.friction = 0.99;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.y += this.velocity.y;
+                this.x += this.velocity.x;
+                this.alpha -= 0.01;
+            }
+        }
+
+        let particles = [];
+
+        const animate = () => {
+            requestAnimationFrame(animate);
+            // Clear the canvas with a transparent overlay to create a trail effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach((particle, index) => {
+                if (particle.alpha > 0.1) {
+                    particle.update();
+                    particle.draw();
+                } else {
+                    particles.splice(index, 1);
+                }
+            });
+        };
+        
+        const createFirework = (x, y) => {
+            const hue = Math.random() * 360;
+            const color = `hsl(${hue}, 100%, 50%)`;
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        };
+        
+        // Add event listeners for mouse and touch
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            createFirework(x, y);
+        });
+        
+        canvas.addEventListener('touchstart', (event) => {
+            event.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const x = event.touches[0].clientX - rect.left;
+            const y = event.touches[0].clientY - rect.top;
+            createFirework(x, y);
+        });
+
+        animate();
+    };
+
+    /* --- PERSONALIZED MESSAGE LOGIC --- */
+    const setupMessageCard = (cardId) => {
+        const submitBtn = document.getElementById('submit-message-btn');
+        const nameInput = document.getElementById('name-input');
+        const messageInput = document.getElementById('message-input');
+        const displayArea = document.getElementById('display-message');
+
+        submitBtn.addEventListener('click', () => {
+            const name = nameInput.value || "Your Friend";
+            const message = messageInput.value || "Wishing you a happy birthday!";
+            
+            if (displayArea) {
+                displayArea.innerHTML = `
+                    <p class="text-2xl font-bold mb-2">A Special Message from ${name}</p>
+                    <p class="text-lg">${message}</p>
+                `;
+            }
+        });
+    };
+    
+    /* --- CAKE CARD LOGIC --- */
+    const setupCakeCard = () => {
+        // This function is intentionally left empty.
+        // The cake's display is controlled purely by the HTML and CSS
+        // and doesn't require any JavaScript to function.
+        // This function exists to maintain a consistent structure with other cards.
+    };
+});
+
+
+function hideDiv(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.style.display = 'none';
+  }
+}
+
+
+function showDiv(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.style.display = 'block';
+  }
+}
+
+
+
+const setupScratchCard = () => {
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx = canvas.getContext('2d');
+    const message = document.getElementById('hidden-message');
+
+    let isDrawing = false;
+
+    // Set canvas dimensions
+    const resizeCanvas = () => {
+        canvas.width = canvas.parentElement.offsetWidth - 32;
+        canvas.height = Math.min(canvas.width * 0.7, 250);
+        drawCover();
+    };
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Draw the gray cover layer
+    const drawCover = () => {
+        ctx.fillStyle = '#C0C0C0';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.strokeStyle = 'rgba(0,0,0,1)';
+        ctx.lineWidth = 30;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    };
+
+    const getCoords = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = event.clientX || event.touches[0].clientX;
+        const clientY = event.clientY || event.touches[0].clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+    };
+
+    const scratch = (x, y) => {
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    };
+
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        ctx.beginPath();
+        const { x, y } = getCoords(e);
+        ctx.moveTo(x, y);
+        scratch(x, y);
+        message.classList.remove('hidden'); // Show the message once scratching starts
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (!isDrawing) return;
+        const { x, y } = getCoords(e);
+        scratch(x, y);
+    });
+
+    canvas.addEventListener('mouseup', () => { isDrawing = false; });
+    canvas.addEventListener('mouseout', () => { isDrawing = false; });
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isDrawing = true;
+        ctx.beginPath();
+        const { x, y } = getCoords(e);
+        ctx.moveTo(x, y);
+        scratch(x, y);
+        message.classList.remove('hidden');
+    });
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (!isDrawing) return;
+        const { x, y } = getCoords(e);
+        scratch(x, y);
+    });
+    canvas.addEventListener('touchend', () => { isDrawing = false; });
+};
+
+
+
+
+
+const setupFortuneTeller = () => {
+    const fortuneBtn = document.getElementById('get-fortune-btn');
+    const fortuneOutput = document.getElementById('fortune-output');
+    const fortunes = [
+        "Your year ahead will be filled with joy and laughter.",
+        "You will embark on a new adventure that brings great happiness.",
+        "A wonderful surprise is waiting for you very soon.",
+        "Your creativity will reach new heights, bringing success.",
+        "You will find new friendships and cherished memories.",
+        "A peaceful and prosperous year awaits you."
+    ];
+
+    fortuneBtn.addEventListener('click', () => {
+        const randomIndex = Math.floor(Math.random() * fortunes.length);
+        fortuneOutput.textContent = fortunes[randomIndex];
+    });
+};
+
+
+
+
+
+const setupCountdownClock = () => {
+    const countdownOutput = document.getElementById('countdown-output');
+
+    const updateCountdown = () => {
+        const now = new Date();
+        const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+        const timeLeft = endOfDay - now;
+
+        if (timeLeft <= 0) {
+            countdownOutput.textContent = "Your birthday has passed!";
+            return;
+        }
+
+        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        countdownOutput.textContent = `${hours}h ${minutes}m ${seconds}s`;
+    };
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+};
+
+
+
+
+
+const setupSpinTheWheel = () => {
+    const canvas = document.getElementById('wheel-canvas');
+    const ctx = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spin-btn');
+    const resultOutput = document.getElementById('spin-result');
+
+    const prizes = ["A Hug", "A Favorite Treat", "No Chores Today", "A Movie Night", "Free Pass", "A Special Wish"];
+    let isSpinning = false;
+    let rotation = 0;
+
+    const drawWheel = () => {
+        const radius = canvas.width / 2;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.translate(radius, radius);
+        ctx.rotate(rotation);
+
+        const sliceAngle = (2 * Math.PI) / prizes.length;
+        prizes.forEach((prize, index) => {
+            const startAngle = index * sliceAngle;
+            const endAngle = (index + 1) * sliceAngle;
+            const color = `hsl(${index * (360 / prizes.length)}, 70%, 50%)`;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, radius, startAngle, endAngle);
+            ctx.fillStyle = color;
+            ctx.fill();
+
+            // Draw text
+            ctx.save();
+            ctx.rotate(startAngle + sliceAngle / 2);
+            ctx.fillStyle = 'white';
+            ctx.font = '16px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(prize, radius * 0.6, 10);
+            ctx.restore();
+        });
+
+        // Draw center circle and arrow
+        ctx.beginPath();
+        ctx.arc(0, 0, 20, 0, Math.PI * 2);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(radius * 0.8, -10);
+        ctx.lineTo(radius * 0.8, 10);
+        ctx.lineTo(radius, 0);
+        ctx.fillStyle = '#000';
+        ctx.fill();
+
+        ctx.restore();
+    };
+
+    const spin = () => {
+        if (isSpinning) return;
+        isSpinning = true;
+        const spinTime = Math.random() * 5000 + 3000;
+        const finalRotation = Math.random() * 360 * Math.PI / 180 + 360 * 5 * Math.PI / 180;
+        const startTime = Date.now();
+
+        const animateSpin = () => {
+            const elapsedTime = Date.now() - startTime;
+            const progress = Math.min(elapsedTime / spinTime, 1);
+            rotation = progress * finalRotation;
+            drawWheel();
+
+            if (progress < 1) {
+                requestAnimationFrame(animateSpin);
+            } else {
+                isSpinning = false;
+                const finalAngle = (rotation % (2 * Math.PI)) * 180 / Math.PI;
+                const selectedIndex = prizes.length - Math.floor((finalAngle / 360) * prizes.length);
+                const winner = prizes[selectedIndex % prizes.length];
+                resultOutput.textContent = `You won: ${winner}!`;
+            }
+        };
+        animateSpin();
+    };
+
+    spinBtn.addEventListener('click', spin);
+    drawWheel();
+};
+
+
+
+/* --- DRAWING CANVAS LOGIC --- */
+/* --- DRAWING CANVAS LOGIC --- */
+const setupDrawingCanvas = (canvasId) => {
+    // Get the canvas element and its 2D context
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    
+    // Get the buttons for clear and save actions
+    const clearBtn = document.getElementById('clear-canvas-btn');
+    const saveBtn = document.getElementById('save-canvas-btn');
+
+    // A simple function to make the canvas responsive
+    const resizeCanvas = () => {
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = Math.min(canvas.width, 300);
+        // Set up initial drawing styles
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    };
+
+    // Call resize immediately to set the initial canvas size
+    resizeCanvas();
+    // Re-size the canvas whenever the window size changes
+    window.addEventListener('resize', resizeCanvas);
+
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    // Helper to get touch/mouse coordinates relative to the canvas
+    const getCoords = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = event.clientX || event.touches[0].clientX;
+        const clientY = event.clientY || event.touches[0].clientY;
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    };
+
+    // The core drawing function
+    const draw = (e) => {
+        if (!isDrawing) return;
+        const { x, y } = getCoords(e);
+        
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        
+        [lastX, lastY] = [x, y];
+    };
+
+    // Mouse event listeners for drawing
+    canvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [getCoords(e).x, getCoords(e).y];
+    });
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseout', () => isDrawing = false);
+
+    // Touch event listeners for drawing
+    canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isDrawing = true;
+        [lastX, lastY] = [getCoords(e).x, getCoords(e).y];
+    });
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        draw(e);
+    });
+    canvas.addEventListener('touchend', () => isDrawing = false);
+
+    // Button event listeners for clear and save
+    clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    saveBtn.addEventListener('click', () => {
+        const dataURL = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'birthday-drawing.png';
+        link.href = dataURL;
+        link.click();
+        link.remove();
+    });
+};
+
+
+
+
+
+
+
+
+const setupTimeCapsule = () => {
+    // Check if a time capsule already exists in localStorage
+    let capsuleData = localStorage.getItem('birthdayTimeCapsule');
+
+    if (!capsuleData) {
+        // If not, create a new one with your secret message and unlock date
+        // IMPORTANT: Set your future date and secret message here!
+        const unlockDate = new Date(2026, 7, 24).getTime(); // Example: August 24, 2026
+        const secretMessage = "Happy birthday in the future! I hope you're having an amazing year. Remember this day and how far you've come. Always stay awesome! - Your Friend";
+
+        // Store the data in localStorage
+        capsuleData = JSON.stringify({
+            unlockDate: unlockDate,
+            message: secretMessage
+        });
+        localStorage.setItem('birthdayTimeCapsule', capsuleData);
+    }
+
+    // Parse the data back into a JavaScript object
+    const capsule = JSON.parse(capsuleData);
+
+    const statusDisplay = document.getElementById('capsule-status');
+    const messageDisplay = document.getElementById('capsule-message');
+
+    const checkDate = () => {
+        const now = new Date().getTime();
+        if (now >= capsule.unlockDate) {
+            // It's time to unlock!
+            statusDisplay.textContent = "Your time capsule has been unlocked!";
+            messageDisplay.textContent = capsule.message;
+            messageDisplay.classList.remove('hidden');
+        } else {
+            // Not yet unlocked, show the countdown
+            const timeLeft = capsule.unlockDate - now;
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            statusDisplay.textContent = `This capsule is sealed. This will open after the completion of this time.
+                          ${days}d ${hours}h ${minutes}m ${seconds}s`;
+            
+            // Update the countdown every second
+            setTimeout(checkDate, 1000);
+        }
+    };
+
+    checkDate();
+};
+
+
+
+
+
+
+
+
+
+const setupStargazer = () => {
+    const canvas = document.getElementById('stargazer-canvas');
+    const ctx = canvas.getContext('2d');
+    const messageOutput = document.getElementById('stargazer-message');
+
+    let stars = [];
+    const numStars = 200;
+
+    // Your custom constellations and messages
+    const constellations = [
+        {
+            name: "The Friendship",
+            message: "Just like these stars, our friendship shines bright and endless. Here's to more adventures!",
+            points: [
+                { x: 0.2, y: 0.3 }, { x: 0.5, y: 0.2 }, { x: 0.7, y: 0.4 }, { x: 0.4, y: 0.6 }
+            ]
+        },
+        {
+            name: "The Laughter",
+            message: "May your year be filled with as much laughter as there are stars in the sky. ✨",
+            points: [
+                { x: 0.8, y: 0.6 }, { x: 0.6, y: 0.8 }, { x: 0.9, y: 0.9 }
+            ]
+        },
+        {
+            name: "The Adventure",
+            message: "Wishing you a year of amazing new adventures. Stay curious and keep exploring!",
+            points: [
+                { x: 0.1, y: 0.8 }, { x: 0.3, y: 0.9 }, { x: 0.5, y: 0.85 }
+            ]
+        }
+    ];
+
+    // Helper to get coordinates
+    const getCoords = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = event.clientX || event.touches[0].clientX;
+        const clientY = event.clientY || event.touches[0].clientY;
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    };
+
+    // Initialize the canvas and stars
+    const initCanvas = () => {
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = Math.min(canvas.width, 300);
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                opacity: Math.random()
+            });
+        }
+        drawStars();
+        drawConstellations(false);
+    };
+
+    // Draw the static stars
+    const drawStars = () => {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(star => {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+            ctx.fill();
+        });
+    };
+
+    // Draw the constellations
+    const drawConstellations = (isHovering, constellationIndex = null) => {
+        constellations.forEach((constellation, index) => {
+            const points = constellation.points.map(p => ({
+                x: p.x * canvas.width,
+                y: p.y * canvas.height
+            }));
+
+            if (isHovering && index === constellationIndex) {
+                // Draw the constellation lines
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Draw the "stars" of the constellation
+                points.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                    ctx.fillStyle = 'yellow';
+                    ctx.fill();
+                });
+            }
+        });
+    };
+
+    // Event listener for hover/touch
+    canvas.addEventListener('mousemove', (e) => {
+        drawStars(); // Redraw static stars on every move
+        let foundConstellation = false;
+        const { x, y } = getCoords(e);
+        
+        constellations.forEach((constellation, index) => {
+            const points = constellation.points.map(p => ({
+                x: p.x * canvas.width,
+                y: p.y * canvas.height
+            }));
+            
+            // Check if the mouse is near any of the constellation points
+            const isNear = points.some(p => Math.sqrt((x - p.x)**2 + (y - p.y)**2) < 20);
+            
+            if (isNear) {
+                drawConstellations(true, index);
+                messageOutput.textContent = constellation.message;
+                messageOutput.style.opacity = '1';
+                foundConstellation = true;
+            }
+        });
+
+        if (!foundConstellation) {
+            drawConstellations(false); // Hide constellations
+            messageOutput.style.opacity = '0';
+        }
+    });
+
+    // Handle initial setup and window resize
+    initCanvas();
+    window.addEventListener('resize', initCanvas);
+};
+
+
+
+
+
+
+
+const setupTimeMachine = () => {
+    const startBtn = document.getElementById('start-journey-btn');
+    const startScreen = document.getElementById('time-machine-start');
+    const displayScreen = document.getElementById('time-machine-display');
+    const timeline = document.getElementById('timeline');
+    
+    // Customize your journey here!
+    // Each object represents a moment in time.
+    const journeyData = [
+    {
+        year: 2006,
+        message: "It is the year you came into this world, a little miracle wrapped in love, bringing joy to everyone around you.",
+        image: "https://media.giphy.com/media/3ohc1j3lD7BzRHkshC/giphy.gif"
+    },
+    {
+        year: 2011,
+        message: "It is the year you laughed louder, ran faster, and discovered the magic in everyday moments with family and friends.",
+        image: "https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif"
+    },
+    {
+        year: 2016,
+        message: "It is the year you found your passions, learned to dream bigger, and felt the first sparks of independence and courage.",
+        image: "https://media.giphy.com/media/l41lI4bYmcsPJX9Go/giphy.gif"
+    },
+    {
+        year: 2021,
+        message: "It is the year you reflected on everything you’ve achieved, embraced challenges, and let your spirit shine brighter than ever.",
+        image: "https://media.giphy.com/media/3o6ZtpxSZbQRRnwCKQ/giphy.gif"
+    },
+    {
+        year: 2025,
+        message: "It is today — the moment to celebrate you, your dreams, your laughter, and all the beautiful memories yet to come. Happy Birthday!",
+        image: "https://media.giphy.com/media/l0MYyDaYzA6Zz0rkY/giphy.gif"
+    }
+];
+
+
+    const generateTimeline = () => {
+        timeline.innerHTML = ''; // Clear previous timeline if it exists
+        journeyData.forEach((moment, index) => {
+            const item = document.createElement('div');
+            item.className = 'w-full h-full flex flex-col items-center justify-center p-8 text-center snap-center';
+            item.innerHTML = `
+                 
+                <br>
+                <h4 class="text-2xl font-bold">${moment.year}</h4>
+                <p class="text-xs italic mt-2">${moment.message}</p>
+                <img src="${moment.image}" alt="Memory from ${moment.year}" class="mt-4 rounded-lg shadow-lg max-w-full max-h-[150px] object-cover">
+                <br> 
+              
+            `;
+            timeline.appendChild(item);
+        });
+    };
+
+    startBtn.addEventListener('click', () => {
+        startScreen.classList.add('hidden');
+        displayScreen.classList.remove('hidden');
+        generateTimeline();
+    });
+};
+
+
+
+
+const setupWishingWell = () => {
+    const canvas = document.getElementById('wishing-well-canvas');
+    const ctx = canvas.getContext('2d');
+    const wishInput = document.getElementById('user-wish-input');
+    const sendBtn = document.getElementById('send-wish-btn');
+    const wishPrompt = document.getElementById('wish-prompt');
+
+    let shootingStars = [];
+    const numStars = 150;
+    let stars = [];
+
+    // Initialize stars for the background
+    const initStars = () => {
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                opacity: Math.random()
+            });
+        }
+    };
+
+    // Draw the background stars
+    const drawStars = () => {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(star => {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+            ctx.fill();
+        });
+    };
+
+    // Class for a shooting star
+    class ShootingStar {
+        constructor(text) {
+            this.x = -100;
+            this.y = Math.random() * canvas.height;
+            this.length = Math.random() * 80 + 50;
+            this.speed = Math.random() * 5 + 3;
+            this.text = text;
+            this.alpha = 1;
+        }
+
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            // Draw the tail
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x - this.length, this.y);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw the message
+            ctx.font = '16px Inter, sans-serif';
+            ctx.fillStyle = '#fff';
+            ctx.fillText(this.text, this.x + 10, this.y + 5);
+
+            ctx.restore();
+        }
+
+        update() {
+            this.x += this.speed;
+            if (this.x > canvas.width + this.length) {
+                this.x = -this.length;
+                this.y = Math.random() * canvas.height;
+            }
+        }
+    }
+
+    const animate = () => {
+        drawStars();
+        shootingStars.forEach(star => {
+            star.update();
+            star.draw();
+        });
+        requestAnimationFrame(animate);
+    };
+
+    const resizeCanvas = () => {
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = Math.min(canvas.width, 350);
+        initStars();
+        drawStars();
+    };
+
+    // Event listener for the "Send" button
+    sendBtn.addEventListener('click', () => {
+        const userWish = wishInput.value.trim();
+        if (userWish) {
+            shootingStars.push(new ShootingStar(userWish));
+            wishInput.value = '';
+            wishPrompt.textContent = "Your wish is on its way to the stars! ✨";
+        }
+    });
+
+    // Handle initial setup and window resize
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    // Add a few initial shooting stars for effect
+    shootingStars.push(new ShootingStar("Happy Birthday!"));
+    shootingStars.push(new ShootingStar("Best wishes!"));
+    
+    animate();
+};
+
+
+
+
+
+
+
+
+
+const setupComplimentMachine = () => {
+    // Customize your compliments here! Add as many as you like.
+    const compliments = [
+        "You're a brilliant and kind person, and I'm so lucky to know you.",
+        "Your laugh is my favorite sound in the world.",
+        "Your passion and determination are truly inspiring.",
+        "You bring so much joy to everyone around you.",
+        "The world is a better place because you're in it. Happy Birthday!",
+        "You have a heart of gold. Thank you for being you.",
+        "You always know how to make me smile.",
+        "Your creativity knows no bounds.",
+        "Your kindness is a true gift to others."
+    ];
+
+    const complimentDisplay = document.getElementById('compliment-display');
+    const nextComplimentBtn = document.getElementById('next-compliment-btn');
+    
+    let currentComplimentIndex = 0;
+    
+    // Function to display the next compliment
+    const displayNextCompliment = () => {
+        // Shuffle the array to show compliments in a random order
+        compliments.sort(() => Math.random() - 0.5);
+        
+        // Display the first item in the shuffled array
+        complimentDisplay.textContent = compliments[0];
+    };
+    
+    // Event listener for the "Next Compliment" button
+    nextComplimentBtn.addEventListener('click', () => {
+        displayNextCompliment();
+    });
+    
+    // Display the first compliment when the card is opened
+    displayNextCompliment();
+
+    // Set a timer to automatically change the compliment every 15 seconds
+    setInterval(displayNextCompliment, 15000);
+};
+
+
+
+
+
+
+
+
+
+
+
+const setupDirectMessage = () => {
+    // IMPORTANT: Customize your message here!
+    const birthdayMessage = "I know this isn’t the usual way to celebrate, but I hope this moment brings a quiet reminder of the beauty and value of life. May each day ahead unfold with purpose and hope, and may even the smallest moments hold meaning. I pray that you are surrounded by love and kindness, guided by wisdom, and strengthened with courage to face every challenge. May peace fill your heart, joy uplift your spirit, and blessings accompany you wherever you go.";
+    
+    const messageElement = document.getElementById('final-message-text');
+    messageElement.textContent = birthdayMessage;
+};
+
+
+
+
+
+
+const setupBirthdayRiddle = () => {
+    // IMPORTANT: Customize the riddle, answer, and message here!
+    const riddle = {
+        question: "I have a heart that doesn't beat. I am a place where you can find love and kindness. What am I?",
+        answer: "home",
+        message: "You are the heart of our home. Happy Birthday to the one who makes life so beautiful!"
+    };
+
+    const riddleQuestion = document.getElementById('riddle-question');
+    const riddleAnswerInput = document.getElementById('riddle-answer');
+    const submitBtn = document.getElementById('submit-btn');
+    const riddleScreen = document.getElementById('riddle-screen');
+    const riddleSolvedScreen = document.getElementById('riddle-solved');
+    const riddleMessage = document.getElementById('riddle-message');
+
+    riddleQuestion.textContent = riddle.question;
+
+    submitBtn.addEventListener('click', () => {
+        const userAnswer = riddleAnswerInput.value.toLowerCase().trim();
+        if (userAnswer === riddle.answer) {
+            riddleScreen.classList.add('hidden');
+            riddleSolvedScreen.classList.remove('hidden');
+            riddleMessage.textContent = riddle.message;
+        } else {
+            alert("Oops, that's not it. Try again!");
+        }
+    });
+};
+
+    </script>
+</head>
+<body class="flex flex-col items-center justify-start p-8">
+
+    <div class="animated-bg">
+        <div class="balloon large" style="left: 10%; animation-delay: 2s;"></div>
+        <div class="balloon medium" style="left: 30%; animation-delay: 8s;"></div>
+        <div class="balloon small" style="left: 50%; animation-delay: 5s;"></div>
+        <div class="balloon large" style="left: 70%; animation-delay: 12s;"></div>
+        <div class="balloon medium" style="left: 90%; animation-delay: 18s;"></div>
+    </div>
+
+    <header class="text-center mb-12 relative z-10">
+        <p class="text-2xl md:text-7xl font-bold mb-4 animate-pulse">Welcome to Lambda – Explore the World of Venta!</p>
+        <p class="text-smd:text-xl max-w-2xl mx-auto">Dive in, explore every corner, and experience the endless possibilities waiting for you. Discover, interact, and let your curiosity guide you through a journey designed to inspire and amaze.</p>
+    </header>
+
+    <main class="card-grid">
+        
+        
+        
+    
+
+<div id="card-30" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl"> ☣️ </span>
+            <p class="mt-4 text-xl font-bold">[Λ] V E N T A</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-xs font-medium mb-4">
+                Welcome to VENTA! This project is still under development. For a clear understanding, please read the copyright notice below. Only proceed if you truly wish to continue.
+            </p>
+            <button class="open-card-btn" data-content-id="image-reveal">continue</button>
+        </div>
+    </div>
+    <div class="active-content" id="image-reveal">
+        <div id="image-start-screen" class="flex flex-col items-center justify-center h-full w-full">
+            <p class="text-1xl font-bold mb-4 text-center">Reveal the QR code by clicking the button below, then scan it to continue.</p>
+            <button id="reveal-image-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200">
+                Reveal QR code 
+            </button>
+        </div>
+
+        <div id="image-container" class="hidden flex flex-col items-center justify-center w-full p-4">
+            <img id="surprise-image" src="" alt="A surprise photo" class="w-full h-auto max-h-[300px] object-contain rounded-lg shadow-lg">
+            <br>
+            <p class="text-1xl font-bold mb-4 text-center">Scan the QR code or click the button below to open directly.</p>
+          <button 
+  class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200" 
+  onclick="window.location.href='https://ll-mohammed-azam-ll.github.io/-V-E-N-T-A/'">
+  Explore VENTA
+</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--  //////////////////////////////////// -->
+
+
+<!--  
+        
+        <div id="card-1" class="card">
+            <div class="card-inner">
+                <div class="card-face card-front flex-col">
+                    <span class="text-6xl">📸</span>
+                    <p class="mt-4 text-xl font-bold">A Look Back</p>
+                </div>
+                <div class="card-face card-back flex-col">
+                    <p class="text-lg font-medium mb-4">
+                        Open this card to see some lovely memories.
+                    </p>
+                    <button class="open-card-btn" data-content-id="photo-album">Open</button>
+                </div>
+            </div>
+            <div class="active-content" id="photo-album">
+                <p class="text-2xl font-bold mb-4">Cherished Memories</p>
+                <div class="image-grid w-full h-full max-h-[300px]">
+                    <img src="https://placehold.co/200x200/5C7AFF/FFFFFF?text=Memory+1" alt="Placeholder 1" class="w-full h-full">
+                    <img src="https://placehold.co/200x200/F94144/FFFFFF?text=Memory+2" alt="Placeholder 2" class="w-full h-full">
+                    <img src="https://placehold.co/200x200/F8961E/FFFFFF?text=Memory+3" alt="Placeholder 3" class="w-full h-full">
+                    <img src="https://placehold.co/200x200/43AA8B/FFFFFF?text=Memory+4" alt="Placeholder 4" class="w-full h-full">
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+     
+        
+        
+        
+        
+        
+        <div id="card-2" class="card">
+            <div class="card-inner">
+                <div class="card-face card-front flex-col">
+                    <span class="text-6xl">✍️</span>
+                    <p class="mt-4 text-xl font-bold">A Birthday Poem</p>
+                </div>
+                <div class="card-face card-back flex-col">
+                    <p class="text-lg font-medium mb-4">
+                        Give me a topic and I will write a poem just for you!
+                    </p>
+                    <button class="open-card-btn" data-content-id="poem-generator">Open</button>
+                </div>
+            </div>
+            <div class="active-content" id="poem-generator">
+                <p class="text-lg font-bold mb-2">Write about...</p>
+                <textarea id="poem-prompt" class="w-full h-20 mb-4 p-2 text-sm text-gray-800 rounded-lg" placeholder="e.g., Friendship, Joy, Growing older..."></textarea>
+                <button id="generate-poem-btn">Generate Poem</button>
+                <div id="poem-output" class="mt-4 text-left w-full h-full overflow-y-auto"></div>
+                <div id="poem-loading" class="mt-4 hidden"><div class="spinner"></div></div>
+            </div>
+        </div>
+
+      
+
+
+
+
+
+        <div id="card-5" class="card">
+            <div class="card-inner">
+                <div class="card-face card-front flex-col">
+                    <span class="text-6xl">💌</span>
+                    <p class="mt-4 text-xl font-bold">A Special Message</p>
+                </div>
+                <div class="card-face card-back flex-col">
+                    <p class="text-lg font-medium mb-4">
+                        Enter your name and a birthday wish to create a personal greeting.
+                    </p>
+                    <button class="open-card-btn" data-content-id="message-card">Open</button>
+                </div>
+            </div>
+            <div class="active-content" id="message-card">
+                <div class="w-full h-full p-4 flex flex-col justify-center items-center">
+                    <input type="text" id="name-input" class="mb-2" placeholder="Your Name">
+                    <textarea id="message-input" placeholder="Your birthday wish..."></textarea>
+                    <button id="submit-message-btn">Create Message</button>
+                    <div id="display-message" class="mt-4 w-full h-full overflow-y-auto"></div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        <div id="card-7" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">🪙</span>
+            <p class="mt-4 text-xl font-bold">A Hidden Surprise</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-lg font-medium mb-4">
+                Grab a coin (or your finger!) and scratch the card to reveal your prize.
+            </p>
+            <button class="open-card-btn" data-content-id="scratch-off">Open</button>
+        </div>
+    </div>
+    <div class="active-content" id="scratch-off">
+        <p class="text-xl font-bold mb-4">Scratch to Reveal!</p>
+        <canvas id="scratch-canvas" class="w-full h-full max-h-[300px]"></canvas>
+        <div id="hidden-message" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-4xl font-bold drop-shadow-md">
+            You're the best!
+        </div>
+    </div>
+</div> 
+
+ -->
+
+
+
+
+
+
+<!--
+<div id="card-9" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">⏰</span>
+            <p class="mt-4 text-xl font-bold">The Birthday Clock</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-lg font-medium mb-4">
+                Watch the final moments of your birthday in real-time.
+            </p>
+            <button class="open-card-btn" data-content-id="countdown-clock">Open</button>
+        </div>
+    </div>
+    <div class="active-content" id="countdown-clock">
+        <p class="text-3xl font-bold mb-2">Time until your birthday ends:</p>
+        <p id="countdown-output" class="text-5xl font-mono"></p>
+    </div>
+</div>
+ 
+
+<div id="card-10" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">🎡</span>
+            <p class="mt-4 text-xl font-bold">Spin the Wheel</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-lg font-medium mb-4">
+                Spin the wheel to win a special birthday treat!
+            </p>
+            <button class="open-card-btn" data-content-id="spin-the-wheel">Open</button>
+        </div>
+    </div>
+    <div class="active-content" id="spin-the-wheel">
+        <canvas id="wheel-canvas" class="w-full max-w-[300px] aspect-square"></canvas>
+        <button id="spin-btn" class="mt-4">Spin</button>
+        <p id="spin-result" class="mt-4 text-2xl font-bold text-center"></p>
+    </div>
+</div>
+
+
+
+
+
+<div id="card-11" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">🖌️</span>
+            <p class="mt-4 text-xl font-bold">The Memory Mural</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-lg font-medium mb-4">
+                Add your message or drawing to a shared canvas for a special surprise!
+            </p>
+            <button class="open-card-btn" data-content-id="memory-mural">Open</button>
+        </div>
+    </div>
+    <div class="active-content" id="memory-mural">
+        <p class="text-2xl font-bold mb-4">Add your mark!</p>
+        <canvas id="mural-canvas" class="w-full h-full max-h-[300px] border-2 border-white rounded-lg"></canvas>
+        <div class="flex flex-col sm:flex-row gap-2 mt-4">
+            <input type="color" id="mural-color-picker" value="#ffffff" class="w-12 h-12 rounded-full border-2">
+            <button id="mural-clear-btn" class="flex-grow">Clear My Drawing</button>
+            <button id="mural-save-btn" class="flex-grow">Save Mural</button>
+        </div>
+    </div>
+</div>
+ -->
+
+
+
+
+
+<!--  
+<div id="card-15" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">🌌</span>
+            <p class="mt-4 text-xl font-bold">Your Cosmic Gift</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-lg font-medium mb-4">
+                Explore the stars to find a personalized message from the cosmos.
+            </p>
+            <button class="open-card-btn" data-content-id="stargazer">Open</button>
+        </div>
+    </div>
+    <div class="active-content" id="stargazer">
+        <h3 class="text-2xl font-bold mb-4 text-center">Touch the Stars...</h3>
+        <canvas id="stargazer-canvas" class="w-full h-full border border-gray-400 rounded-lg"></canvas>
+        <p id="stargazer-message" class="mt-4 text-xl text-center italic opacity-0 transition-opacity duration-500"></p>
+    </div>
+</div>
+
+  -->
+
+
+
+
+
+
+
+
+
+<!--  
+<div id="card-17" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">✨</span>
+            <p class="mt-4 text-xl font-bold">Your Birthday Wishes</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-lg font-medium mb-4">
+                Open this card to make a wish and watch it come true.
+            </p>
+            <button class="open-card-btn" data-content-id="wishing-well">Open</button>
+        </div>
+    </div>
+    <div class="active-content p-0" id="wishing-well">
+        <canvas id="wishing-well-canvas" class="absolute inset-0 z-0"></canvas>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full w-full p-4">
+            <p class="text-2xl font-bold mb-4 text-center" id="wish-prompt">
+                What do you wish for this year?
+            </p>
+            <textarea id="user-wish-input" class="w-full max-w-sm h-24 p-2 mb-4 bg-gray-800 text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Type your wish here..."></textarea>
+            <button id="send-wish-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200">
+                Send My Wish
+            </button>
+        </div>
+    </div>
+</div>
+ -->
+
+
+
+
+
+<!--  
+<div id="card-18" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">✨</span>
+            <p class="mt-4 text-xl font-bold">Your Compliment Machine</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-lg font-medium mb-4">
+                Open to receive a special compliment, just for you.
+            </p>
+            <button class="open-card-btn" data-content-id="compliment-machine">Open</button>
+        </div>
+    </div>
+    <div class="active-content" id="compliment-machine">
+        <p id="compliment-display" class="text-2xl font-bold italic text-center px-4"></p>
+        <button id="next-compliment-btn" class="mt-4 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200">
+            Get Another Compliment
+        </button>
+    </div>
+</div>
+
+
+
+
+ 
+<div id="card-20" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">🎊</span>
+            <p class="mt-4 text-xl font-bold">Your Celebration Pop</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-lg font-medium mb-4">
+                Click to create a shower of celebration!
+            </p>
+            <button class="open-card-btn" data-content-id="particle-pop">Open</button>
+        </div>
+    </div>
+    <div class="active-content" id="particle-pop">
+        <div id="pop-start-screen" class="flex flex-col items-center justify-center h-full w-full text-center">
+            <h3 class="text-2xl font-bold mb-4">Click to Celebrate!</h3>
+            <button id="pop-button" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200">
+                Pop Now!
+            </button>
+        </div>
+        
+        <div id="pop-message" class="hidden flex flex-col items-center justify-center h-full w-full opacity-0 transition-opacity duration-1000">
+            <h2 class="text-4xl font-bold text-center animate-fadeInDown">Happy Birthday!</h2>
+            <p class="mt-4 text-xl italic text-center animate-fadeInUp delay-1s">Wishing you the best year ahead!</p>
+        </div>
+    </div>
+</div>
+
+ -->
+
+
+
+
+
+
+
+
+
+<div id="card-21" class="card">
+    <div class="card-inner">
+        <div class="card-face card-front flex-col">
+            <span class="text-6xl">©️</span>
+            <p class="mt-4 text-xl font-bold">Copyright notice</p>
+        </div>
+        <div class="card-face card-back flex-col">
+            <p class="text-1xl font-medium mb-4">
+                Click to reveal the next layer of important information.
+            </p>
+            <button class="open-card-btn" data-content-id="floral-celebration">Open</button>
+        </div>
+    </div>
+    <div class="active-content" id="floral-celebration">
+       <div id="floral-start-screen" class="flex flex-col items-center justify-center h-full w-full text-center">
+            <h3 class="text-1xl font-bold mb-4">This is a legal copyright notice; please read the entire content carefully before proceeding or taking any action.</h3>
+            <button id="floral-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200">
+                Open 
+            </button>
+        </div> 
+        
+        <div id="floral-message" class="hidden flex flex-col items-center justify-center h-full w-full opacity-0 transition-opacity duration-1000">
+            <h2 class="text-2xl font-bold text-center animate-fadeInDown">Proprietary Rights & Legal Notice.</h2>
+            <p class="mt-4 text-xl italic text-center animate-fadeInUp delay-1s"></p>
+ <!-- Copyright Notice - Small Text Version -->
+<section id="copyright-notice" aria-labelledby="copyright-title" style="font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height:1.4; color:#111; max-width:900px; margin:1rem auto; padding:1rem 1.25rem; border:1px solid #e0e0e0; border-radius:8px; background:#fff; font-size:0.65rem;">
+  <h1 id="copyright-title" style="font-size:0.75rem; margin:0 0 0.5rem 0; font-weight:700;">© 2025 Mohammed Azam. All Rights Reserved.</h1>
+
+  <p>
+    This webpage, including all its content, design, graphics, scripts, interactive elements, media assets, and associated metadata, has been <strong>conceived, developed, and exclusively curated by Mohammed Azam</strong> for the express, singular use of <strong>P Akram Danish </strong>.
+  </p>
+
+  <section aria-labelledby="special-enforcement" style="margin-top:0.5rem;">
+    <h2 id="special-enforcement" style="font-size:0.7rem; margin:0 0 0.25rem 0; font-weight:700;">Special Enforcement Notice – card 1 <br>( [Λ] V E N T A / virtual entity for neural terminal assistant by Lambda. ):</h2>
+
+    <p>
+      card 1 contains <strong>extremely sensitive, proprietary, and confidential intellectual property</strong>, including a <strong>private project link and QR code</strong> for <strong>Project VENTA</strong>, a proprietary virtual entity designed as a <em>Neural Terminal Assistant</em>. This project constitutes a <strong>core, critical, and deeply secure technological asset</strong> of Mohammed Azam.
+    </p>
+    
+     
+  </p>
+<br>
+    <div style="margin:0.25rem 0; padding:0.35rem; border-left:3px solid #b30000; background:#fff7f7; border-radius:4px;">
+      <strong>Strict Prohibition:</strong>
+      <ul style="margin:0.25rem 0 0 1rem; padding:0;">
+        <li>No individual, organization, or entity other than the intended recipient, <strong>P Akram Danish </strong>, may <strong>access, scan, click, share, reproduce, transmit, modify, or derive any content from this card</strong>, including the private link or QR code.</li>
+        <li>Any unauthorized interaction with this card will constitute a <strong>direct breach of intellectual property law, confidentiality obligations, and cybersecurity statutes</strong>, and is subject to <strong>maximum civil and criminal enforcement under applicable national and international law</strong>.</li>
+        <li>Unauthorized use may result in <strong>injunctive relief, monetary damages, seizure of digital assets, civil prosecution, and criminal charges</strong>, without limitation.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="general-restrictions" style="margin-top:0.5rem;">
+    <h3 id="general-restrictions" style="font-size:0.68rem; margin:0 0 0.25rem 0; font-weight:700;">General Copyright and Access Restrictions:</h3>
+
+    <p>
+      Any unauthorized access, reproduction, distribution, modification, publication, transmission, or derivative use of this webpage, in whole or in part, without the <strong>express, written, and signed consent of both Mohammed Azam and P Akram Danish </strong>, is strictly prohibited and constitutes a <strong>violation of copyright law, intellectual property rights, and international conventions</strong>.
+    </p>
+
+    <p>
+      By accessing this webpage, you expressly acknowledge that:
+    </p>
+
+    <ol style="margin:0 0 0 1rem;">
+      <li>This webpage and its contents are <strong>private, confidential, and legally protected</strong>.</li>
+      <li>Unauthorized use, copying, or distribution — <strong>especially of card 1, its link, or QR code</strong> — will trigger <strong>full legal enforcement</strong>.</li>
+      <li>You have <strong>read, understood, and agreed</strong> to abide by all restrictions and enforcement conditions set forth herein.</li>
+    </ol>
+  </section>
+
+  <p style="margin-top:0.5rem;">
+    <strong>Warning:</strong> This webpage is monitored and protected. Any unauthorized attempt to interact with, replicate, or disclose card 1 or associated content will be treated as a <strong>serious legal offense with immediate action</strong>, including civil and criminal remedies.
+  </p>
+
+
+</section>
+        </div>
+    </div>
+</div>
+
+
+
+    </main>
+    
+<script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.min.js"></script>
+
+<script>
+    const setupParticlePop = () => {
+    const popButton = document.getElementById('pop-button');
+    const popStartScreen = document.getElementById('pop-start-screen');
+    const popMessage = document.getElementById('pop-message');
+
+    // Create a new instance of the Confetti library
+    const jsConfetti = new JSConfetti();
+
+    popButton.addEventListener('click', () => {
+        // Trigger the confetti animation
+        jsConfetti.addConfetti({
+            confettiRadius: 5,
+            confettiNumber: 500,
+            confettiColors: [
+                '#FFC0CB', '#FF69B4', '#FFA07A', '#FFD700', '#B0E0E6',
+                '#9370DB', '#90EE90', '#F08080'
+            ],
+            confettiType: 'circle',
+        });
+        
+        // Hide the button and reveal the message after a short delay
+        setTimeout(() => {
+            popStartScreen.classList.add('hidden');
+            popMessage.classList.remove('hidden');
+            
+            setTimeout(() => {
+                popMessage.style.opacity = '1';
+            }, 50); // Small delay to allow for the transition
+        }, 800); // This delay gives the confetti time to fly
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+const setupFloralCelebration = () => {
+    const floralButton = document.getElementById('floral-button');
+    const floralStartScreen = document.getElementById('floral-start-screen');
+    const floralMessage = document.getElementById('floral-message');
+    const container = document.getElementById('floral-celebration');
+
+   
+
+    // Function to create a single falling element
+    const createParticle = (type) => {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.top = '-50px';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.animation = `fall ${Math.random() * 5 + 3}s linear forwards, rotate ${Math.random() * 2 + 1}s infinite linear`;
+        particle.style.opacity = Math.random() + 0.5;
+
+        if (type === 'petal') {
+            particle.style.width = '15px';
+            particle.style.height = '15px';
+            particle.style.borderRadius = '50% 0 50% 0';
+        } else if (type === 'ribbon') {
+            particle.style.width = '20px';
+            particle.style.height = '5px';
+            particle.style.borderRadius = '2px';
+        }
+        
+        container.appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, 5000); // Remove particle after it falls
+    };
+
+    // A simple animation keyframes for falling and rotation
+    const styleSheet = document.createElement("style");
+    styleSheet.innerHTML = `
+        @keyframes fall {
+            to { transform: translateY(${container.clientHeight + 50}px) rotateZ(360deg); }
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+
+    // Event listener for the "Let it Rain!" button
+    floralButton.addEventListener('click', () => {
+        // Create a shower of particles
+        for (let i = 0; i < 100; i++) {
+            setTimeout(() => {
+                const type = Math.random() > 0.5 ? 'petal' : 'ribbon';
+                createParticle(type);
+            }, i * 20);
+        }
+        
+        // Hide the button and reveal the message after the animation starts
+        setTimeout(() => {
+            floralStartScreen.classList.add('hidden');
+            floralMessage.classList.remove('hidden');
+            
+            setTimeout(() => {
+                floralMessage.style.opacity = '1';
+            }, 50);
+        }, 800);
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// List of celebration emojis
+const celebrationEmojis = ["💓", "🌹", "💞", "❄️", "🎀", "🎊", "✨", "💕"];
+
+/**
+ * 🎉 Start a celebration effect
+ * @param {number} particleCount - How many particles to create
+ */
+function startCelebration(particleCount = 80) {
+  for (let i = 0; i < particleCount; i++) {
+    createParticle();
+  }
+}
+
+// Internal: creates a single falling particle
+function createParticle() {
+  const particle = document.createElement("div");
+  particle.textContent = celebrationEmojis[Math.floor(Math.random() * celebrationEmojis.length)];
+
+  // Style dynamically
+  Object.assign(particle.style, {
+    position: "fixed",
+    top: "-50px",
+    left: Math.random() * 100 + "vw",
+    fontSize: Math.random() * 20 + 10 + "px",
+    animation: `fall ${Math.random() * 3 + 3}s linear forwards`,
+    pointerEvents: "none",
+    zIndex: 9999
+  });
+
+  document.body.appendChild(particle);
+
+  particle.addEventListener("animationend", () => particle.remove());
+}
+
+// Define animation with JS (injected once)
+(function injectKeyframes() {
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+
+//startCelebration();      // default 80 particles  
+//startCelebration(150);   // 150 particles
+
+
+</script>
+<script>
+  function runCelebrationRepeated() {
+    let count = 0;
+    const interval = setInterval(() => {
+      startCelebration(); // call your function
+      count++;
+      if (count >= 5) {
+        clearInterval(interval); // stop after 5 times
+      }
+    }, 500); // 500 ms = 0.6 second
+  }
+
+  // Example: run when user clicks the button
+/*document.getElementById("cake-container").addEventListener("click", () => {
+    runCelebrationRepeated();
+  });*/
+  
+
+
+</script>
+
+<script>
+  function changeSentence(newText) {
+    const msg = document.getElementById("iiiii");
+    msg.textContent = newText;
+  }
+</script>
+
+<script>
+  function changeSentence1(newText, newSize) {
+    const msg = document.getElementById("iiiii");
+    msg.style.opacity = 0; // fade out
+
+    setTimeout(() => {
+      msg.textContent = newText;     // change text
+      msg.style.fontSize = newSize;  // change size
+      msg.style.opacity = 1;         // fade in
+    }, 0); // delay matches fade-out time
+  }
+</script>
+
+
+<style>
+/* Game Card Styles */
+.game-card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 8px;
+    background-color: #3f83f8; /* A nice blue for the back of the card */
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    user-select: none;
+}
+
+.game-card.matched {
+    cursor: default;
+    transform: scale(0.9);
+    opacity: 0.6;
+}
+
+.game-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face-front, .card-face-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.card-face-front {
+    background-color: #ff40a8ca;
+    color: white;
+    transform: rotateY(0deg);
+}
+
+.card-face-back {
+    background-color: #e0f2fe; /* Light blue for the front of the card */
+    color: black;
+    transform: rotateY(180deg);
+}
+</style>
+
+<script>
+    const setupMemoryMatch = () => {
+    // IMPORTANT: Customize your icons and message here!
+    const cardIcons = ['🎉', '🎈', '🎁', '🎂', '💌', '🌟', '💖', '👑'];
+    const pairs = [...cardIcons, ...cardIcons]; // Create pairs of icons
+    const winMessage = "Congratulations! Your memory is as amazing as you are. Happy Birthday!";
+
+    const gameGrid = document.getElementById('game-grid');
+    const winScreen = document.getElementById('win-screen');
+    const winMessageElement = document.getElementById('win-message');
+    
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let lockBoard = false;
+
+    // Shuffle the cards
+    const shuffle = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+    const shuffledPairs = shuffle(pairs);
+
+    // Create the card elements and add them to the grid
+    shuffledPairs.forEach(icon => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('game-card');
+        cardElement.innerHTML = `
+            <div class="card-face-front">?</div>
+            <div class="card-face-back">${icon}</div>
+        `;
+        cardElement.dataset.icon = icon;
+        cardElement.addEventListener('click', () => flipCard(cardElement));
+        gameGrid.appendChild(cardElement);
+    });
+
+    const flipCard = (card) => {
+        if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) {
+            return;
+        }
+
+        card.classList.add('flipped');
+        flippedCards.push(card);
+
+        if (flippedCards.length === 2) {
+            lockBoard = true;
+            checkForMatch();
+        }
+    };
+
+    const checkForMatch = () => {
+        const [card1, card2] = flippedCards;
+        if (card1.dataset.icon === card2.dataset.icon) {
+            matchCards();
+        } else {
+            unflipCards();
+        }
+    };
+
+    const matchCards = () => {
+        flippedCards.forEach(card => card.classList.add('matched'));
+        matchedPairs++;
+        resetBoard();
+
+        if (matchedPairs === cardIcons.length) {
+            setTimeout(() => {
+                gameGrid.classList.add('hidden');
+                winScreen.classList.remove('hidden');
+                winMessageElement.textContent = winMessage;
+            }, 800);
+        }
+    };
+
+    const unflipCards = () => {
+        setTimeout(() => {
+            flippedCards.forEach(card => card.classList.remove('flipped'));
+            resetBoard();
+        }, 1000);
+    };
+
+    const resetBoard = () => {
+        flippedCards = [];
+        lockBoard = false;
+    };
+};
+
+
+
+
+
+
+const setupImageReveal = () => {
+    // IMPORTANT: Replace the URL below with the link to your own image!
+    const imageUrl = "89e066176b1a07f88119c5478f703de4%20(1).png";
+
+    const revealImageBtn = document.getElementById('reveal-image-btn');
+    const imageStartScreen = document.getElementById('image-start-screen');
+    const imageContainer = document.getElementById('image-container');
+    const surpriseImage = document.getElementById('surprise-image');
+
+    revealImageBtn.addEventListener('click', () => {
+        // Set the image source
+        surpriseImage.src = imageUrl;
+        
+        // Hide the button and show the image
+        imageStartScreen.classList.add('hidden');
+        imageContainer.classList.remove('hidden');
+    });
+};
+
+
+</script>
+
+
+</body>
+<body></body>
+</html>
