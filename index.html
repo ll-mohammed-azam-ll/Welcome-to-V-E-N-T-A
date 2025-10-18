@@ -2090,6 +2090,156 @@ const setupBirthdayRiddle = () => {
 
 
 
+
+<div id="card-21" class="card">
+  <div class="card-inner">
+    <div class="card-face card-front flex-col">
+      <span class="text-6xl">©️</span>
+      <p class="mt-4 text-xl font-bold">Copyright & Developer Guide</p>
+    </div>
+    <div class="card-face card-back flex-col">
+      <p class="text-1xl font-medium mb-4">
+        Click to reveal the developer documentation & legal notice.
+      </p>
+      <button class="open-card-btn" data-content-id="developer-doc">Open</button>
+    </div>
+  </div>
+
+  <div class="active-content" id="developer-doc">
+    <div id="dev-doc-start-screen" class="flex flex-col items-center justify-center h-full w-full text-center">
+      <h3 class="text-1xl font-bold mb-4">
+        Developer Documentation & Legal Copyright Notice
+      </h3>
+      <button id="dev-doc-button" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition-colors duration-200">
+        Open
+      </button>
+    </div>
+
+    <div id="dev-doc-message" class="hidden flex flex-col items-start justify-start h-full w-full opacity-0 transition-opacity duration-1000 p-4 overflow-y-auto" style="max-height: 90vh; background: #f9f9f9; border-radius: 8px;">
+      <h2 class="text-2xl font-bold text-center mb-4">Lambda — Project Overview & Developer Guide</h2>
+      
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">Owner & Legal Notice</h3>
+        <p>© 2025 Mohammed Azam. All Rights Reserved.</p>
+        <p>This webpage, including all content, scripts, graphics, media, and metadata, is exclusively curated by <strong>Mohammed Azam</strong> for the use of <strong>P Akram Danish</strong>.</p>
+        <p><strong>Strict Prohibition:</strong> No unauthorized access, reproduction, transmission, or modification of any part of this project is allowed. Unauthorized use will be subject to full civil and criminal enforcement.</p>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">1 — Short Summary / Elevator Pitch</h3>
+        <p>Lambda (Vertical Entity for Neural Terminal Awareness) simulates a CLI horror/spy/puzzle game with sensor-driven tasks, face recognition, local progress storage, and modular commands.</p>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">2 — Purpose & UX Goals</h3>
+        <ul>
+          <li>Authentic CLI horror-terminal experience.</li>
+          <li>Sensor-based interactions (camera, mic, torch, vibration, battery).</li>
+          <li>Modular "tasks → tests → unlocks" flow, potential ARG-style storylines.</li>
+        </ul>
+        <p><strong>Player Flow:</strong> Launch → Accept warnings → Start PHYNEMO → Stage 1 Physical Tests → Stage 2 Emotional/Intellectual Tests → Optional Face Recognition → Unlock Mindmirror.</p>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">3 — File Structure & Key Code</h3>
+        <ul>
+          <li>Terminal UI: <code>printAnimated()</code>, <code>createInputLine()</code>, <code>handleCommand()</code></li>
+          <li>Horror Story: <code>startLambdaHorrorStory()</code>, <code>switchToHorrorMode()</code>, <code>showWarning()</code></li>
+          <li>Task System: <code>taskManager()</code>, <code>completeTask()</code>, <code>resetAllTasks()</code></li>
+          <li>Physical Tests: <code>cameraDarknessTask()</code>, <code>micLineGraphTask()</code>, <code>startLambdaTriggerMode()</code></li>
+          <li>Face Recognition: <code>faceRecognitionTask()</code>, <code>selfieVerificationTask()</code></li>
+          <li>Utilities: <code>captureFullTerminal()</code>, <code>downloadRealTimeCountdownLauncher()</code></li>
+          <li>LLM Integration: <code>handleCMD()</code> (Gemini API, remove key)</li>
+        </ul>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">4 — Key Commands</h3>
+        <ul>
+          <li><code>launch -Venta</code> — start horror story</li>
+          <li><code>./activate_test_runner --init phy&emo</code> — PHYNEMO protocol</li>
+          <li><code>task-01 … task-04</code> — physical tasks</li>
+          <li><code>start face / panel face / snapshot / record video</code> — face recognition</li>
+          <li><code>voice-task / sound-detection / cream</code> — mic-based challenges</li>
+          <li><code>possess / diagnose</code> — glitch/narrative effects</li>
+          <li><code>help</code> — full command list</li>
+        </ul>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">5 — Face Recognition & ID Workflow</h3>
+        <p>Camera → capture → descriptor → name/password → save to localStorage → callbacks. Face data stored locally; consent required for remote storage.</p>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">6 — Device & Sensor Interactions</h3>
+        <ul>
+          <li>Camera — face recognition, glitch feed, darkness tasks</li>
+          <li>Microphone — voice/scream tasks, sound detection</li>
+          <li>Flashlight / Torch — limited support, graceful fallback</li>
+          <li>Vibration — punishment/atmosphere effects, optional loops</li>
+          <li>Battery / Charger — gating final tests</li>
+        </ul>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">7 — Security & Privacy Checklist</h3>
+        <ul>
+          <li>Remove hard-coded API keys (Gemini)</li>
+          <li>Face data: store locally, encrypt if stored remotely</li>
+          <li>Explain permissions clearly (camera, mic, notifications)</li>
+          <li>Flash content warning</li>
+          <li>Vibration loops optional / stoppable</li>
+          <li>Provide <code>resetAllTasks</code> and face data reset</li>
+        </ul>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">8 — Running & Testing</h3>
+        <ul>
+          <li>Serve folder with <code>live-server</code> or <code>python -m http.server</code></li>
+          <li>Modern mobile/desktop browser (mobile for flashlight/vibration)</li>
+          <li>Type <code>help</code> to see commands</li>
+          <li>Test face recognition: <code>start face</code> / <code>panel face</code></li>
+          <li>Full flow: PHYNEMO → task-01 → task-04</li>
+        </ul>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">9 — Next Steps / Improvements</h3>
+        <ul>
+          <li>Extract secrets / move LLM calls server-side</li>
+          <li>Add consent dialogs & privacy policy</li>
+          <li>Modularize JS (terminal, audio, face recognition)</li>
+          <li>Accessibility & safety controls</li>
+          <li>Optional server-backed progress</li>
+          <li>Automated tests & CI</li>
+        </ul>
+      </section>
+
+      <section style="margin-bottom:1rem;">
+        <h3 class="font-bold">10 — Code Pointers</h3>
+        <ul>
+          <li>Horror story: <code>startLambdaHorrorStory()</code>, <code>switchToHorrorMode()</code>, <code>showWarning()</code></li>
+          <li>Task flow: <code>taskManager()</code>, <code>completeTask()</code>, <code>resetAllTasks()</code></li>
+          <li>Tasks: <code>Task01()</code> … <code>Task04()</code></li>
+          <li>Face recognition: <code>faceRecognitionTask()</code>, <code>selfieVerificationTask()</code></li>
+          <li>Device helpers: <code>hijackFlashlight()</code>, <code>vibratePhoneauto()</code></li>
+          <li>Export/capture: <code>captureFullTerminal()</code>, <code>downloadRealTimeCountdownLauncher()</code></li>
+          <li>LLM: <code>handleCMD()</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 class="font-bold">11 — Owner Confirmation</h3>
+        <p>I, <strong>Mohammed Azam</strong>, am the owner of this project. This developer documentation is authoritative; all instructions, flow, and legal precautions are provided directly by me for the developer <strong>P Akram Danish</strong>.</p>
+        <p>Developers: Follow instructions carefully. Permissions, face recognition, and sensor logic are demo-only. Ensure privacy & security compliance before extending or deploying.</p>
+      </section>
+    </div>
+  </div>
+</div>
+
+
     </main>
     
 <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.min.js"></script>
