@@ -2245,6 +2245,47 @@ const setupBirthdayRiddle = () => {
 <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.min.js"></script>
 
 <script>
+
+
+
+
+
+// Card Open Button Handler
+document.querySelectorAll('.open-card-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const contentId = btn.getAttribute('data-content-id');
+    const contentDiv = document.getElementById(contentId);
+
+    // Show the content with fade-in
+    if (contentDiv.classList.contains('hidden')) {
+      contentDiv.classList.remove('hidden');
+      setTimeout(() => contentDiv.style.opacity = 1, 50); // fade-in effect
+    } else {
+      contentDiv.style.opacity = 0;
+      setTimeout(() => contentDiv.classList.add('hidden'), 500); // hide after fade-out
+    }
+  });
+});
+
+// Inner "Open" button to reveal the documentation inside start screen
+const innerOpenBtn = document.getElementById('dev-doc-button');
+if(innerOpenBtn) {
+  innerOpenBtn.addEventListener('click', () => {
+    const messageDiv = document.getElementById('dev-doc-message');
+    messageDiv.classList.remove('hidden');
+    setTimeout(() => messageDiv.style.opacity = 1, 50);
+  });
+}
+
+
+
+
+
+
+
+
+
+    
     const setupParticlePop = () => {
     const popButton = document.getElementById('pop-button');
     const popStartScreen = document.getElementById('pop-start-screen');
