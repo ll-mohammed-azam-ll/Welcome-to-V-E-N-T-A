@@ -2179,65 +2179,7 @@ const setupBirthdayRiddle = () => {
           <li>Flashlight / Torch — limited support, graceful fallback</li>
           <li>Vibration — punishment/atmosphere effects, optional loops</li>
           <li>Battery / Charger — gating final tests</li>
-        </ul>
-      </section>
 
-      <section style="margin-bottom:1rem;">
-        <h3 class="font-bold">7 — Security & Privacy Checklist</h3>
-        <ul>
-          <li>Remove hard-coded API keys (Gemini)</li>
-          <li>Face data: store locally, encrypt if stored remotely</li>
-          <li>Explain permissions clearly (camera, mic, notifications)</li>
-          <li>Flash content warning</li>
-          <li>Vibration loops optional / stoppable</li>
-          <li>Provide <code>resetAllTasks</code> and face data reset</li>
-        </ul>
-      </section>
-
-      <section style="margin-bottom:1rem;">
-        <h3 class="font-bold">8 — Running & Testing</h3>
-        <ul>
-          <li>Serve folder with <code>live-server</code> or <code>python -m http.server</code></li>
-          <li>Modern mobile/desktop browser (mobile for flashlight/vibration)</li>
-          <li>Type <code>help</code> to see commands</li>
-          <li>Test face recognition: <code>start face</code> / <code>panel face</code></li>
-          <li>Full flow: PHYNEMO → task-01 → task-04</li>
-        </ul>
-      </section>
-
-      <section style="margin-bottom:1rem;">
-        <h3 class="font-bold">9 — Next Steps / Improvements</h3>
-        <ul>
-          <li>Extract secrets / move LLM calls server-side</li>
-          <li>Add consent dialogs & privacy policy</li>
-          <li>Modularize JS (terminal, audio, face recognition)</li>
-          <li>Accessibility & safety controls</li>
-          <li>Optional server-backed progress</li>
-          <li>Automated tests & CI</li>
-        </ul>
-      </section>
-
-      <section style="margin-bottom:1rem;">
-        <h3 class="font-bold">10 — Code Pointers</h3>
-        <ul>
-          <li>Horror story: <code>startLambdaHorrorStory()</code>, <code>switchToHorrorMode()</code>, <code>showWarning()</code></li>
-          <li>Task flow: <code>taskManager()</code>, <code>completeTask()</code>, <code>resetAllTasks()</code></li>
-          <li>Tasks: <code>Task01()</code> … <code>Task04()</code></li>
-          <li>Face recognition: <code>faceRecognitionTask()</code>, <code>selfieVerificationTask()</code></li>
-          <li>Device helpers: <code>hijackFlashlight()</code>, <code>vibratePhoneauto()</code></li>
-          <li>Export/capture: <code>captureFullTerminal()</code>, <code>downloadRealTimeCountdownLauncher()</code></li>
-          <li>LLM: <code>handleCMD()</code></li>
-        </ul>
-      </section>
-
-      <section>
-        <h3 class="font-bold">11 — Owner Confirmation</h3>
-        <p>I, <strong>Mohammed Azam</strong>, am the owner of this project. This developer documentation is authoritative; all instructions, flow, and legal precautions are provided directly by me for the developer <strong>P Akram Danish</strong>.</p>
-        <p>Developers: Follow instructions carefully. Permissions, face recognition, and sensor logic are demo-only. Ensure privacy & security compliance before extending or deploying.</p>
-      </section>
-    </div>
-  </div>
-</div>
 
 
     </main>
